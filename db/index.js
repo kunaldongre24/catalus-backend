@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mysql = require("mysql");
 
 const db = mysql.createConnection({
@@ -9,7 +10,8 @@ const db = mysql.createConnection({
 const connection = db.connect((err) => {
   if (err) {
     throw err;
+  } else {
+    console.log("connected to the database...");
   }
-  console.log("connected to the database...");
 });
 export default db;

@@ -8,11 +8,13 @@ const AuthController = {
     const user = req.body;
     const { email, username, password } = req.body;
     if (!email || !username || !password) {
-      return res.status(400).send({ message: "Input field cannot be empty" });
+      return res
+        .sendStatus(400)
+        .send({ message: "Input field cannot be empty" });
     } else {
       const checkUser = `SELECT * FROM user WHERE email=? OR username=?`;
       db.query(checkUser, [email, username], async (err, result) => {
-        if (err) console.log(err);
+        if (err) return res.sendStatus(400);
 
         if (result[0].email === email) {
           return res.send({
@@ -32,7 +34,7 @@ const AuthController = {
               res.send(result);
             });
           } catch {
-            res.status(500).send();
+            res.sendStatus(500).send();
           }
         }
       });
@@ -41,33 +43,33 @@ const AuthController = {
 
   login(req, res) {
     const { username, email, password } = req.body;
+    //checking if input field is not empty
     if (!(username || email) || !password) {
-      res.status(400).send({ message: "Input field cannot be empty" });
+      res.sendStatus(400).send({ message: "Input field cannot be empty" });
     } else {
       const sql = "SELECT * FROM user WHERE email=? OR username=?";
       db.query(sql, [email, username], (err, result) => {
-        if (err) console.log(err);
+        if (err) return res.sendStatus(400);
+        //chcking if username exists
         if (!result[0]) {
           res.send({ message: "Username or password is incorrect" });
         } else {
+          //comparing the password
           if (!bcrypt.compare(password, result[0].password)) {
             res.send({ message: "Username or password is incorrect" });
           } else {
             const { id, username } = result[0];
+            //assigning the token
             const token = jwt.sign(
               { id, username },
-              process.env.ACCESS_TOKEN_SECRET
+              process.env.ACCESS_TOKEN_SECRET,
+              {
+                expiresIn: process.env.JWT_TOKEN_EXPIRES_IN,
+              }
             );
-            console.log(`the token is : ${token}`);
-            const cookieOptions = {
-              expires: new Date(
-                Date.now() +
-                  process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-              ),
-              httpOnly: true,
-            };
-            res.cookie("jwt", token, cookieOptions);
-            res.status(200).send("logged in");
+
+            //sending jwt to header
+            res.header("accessToken", token).send(token);
           }
         }
       });
