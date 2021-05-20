@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -8,7 +9,6 @@ import logger from "morgan";
 import db from "./db";
 import bodyParser from "body-parser";
 var cors = require("cors");
-require("dotenv").config();
 
 app.use(cors()); // Use this after the variable declaration
 app.use(compression());

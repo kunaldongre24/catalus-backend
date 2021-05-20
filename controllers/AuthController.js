@@ -54,10 +54,10 @@ const AuthController = {
             res.send({ message: "Username or password is incorrect" });
           } else {
             const { id, username } = result[0];
-            console.log(process.env.JWT_SECRET);
-            const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
-              expiresIn: process.env.JWT_TOKEN_EXPIRES_IN,
-            });
+            const token = jwt.sign(
+              { id, username },
+              process.env.ACCESS_TOKEN_SECRET
+            );
             console.log(`the token is : ${token}`);
             const cookieOptions = {
               expires: new Date(
