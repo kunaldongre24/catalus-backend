@@ -31,22 +31,21 @@ app.use(
     },
   })
 );
-
-app.use("/api/v1/", indexRouter);
-// catch 404 and forward to error handler
 app.use((req, res, next) => {
   const { user } = req.session;
   if (user) {
     const sql = "SELECT * FROM user WHERE username=?";
-    db.query(sql, [user], (err, result) => {
+    db.query(sql, user, (err, result) => {
       if (err) return res.sendStatus(400);
-      if (result[0].user === user) {
-        res.locals.user = user;
+      if (result[0].username === user) {
+        res.locals = result[0];
       }
     });
   }
   next();
 });
+app.use("/api/v1/", indexRouter);
+// catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
   next(createError(404));
