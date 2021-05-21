@@ -73,11 +73,13 @@ const AuthController = {
     }
   },
   logout(req, res) {
-    req.session.destroy((err) => {
-      return res.send("err");
-    });
-    res.clearCookie("user");
-    res.send("logged out successfully!");
+    try {
+      req.session.destroy();
+      res.clearCookie("user");
+      res.send("logged out successfully!");
+    } catch (err) {
+      res.send(err);
+    }
   },
 };
 

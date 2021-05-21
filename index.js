@@ -40,7 +40,7 @@ app.use((req, res, next) => {
     const sql = "SELECT * FROM user WHERE username=?";
     db.query(sql, [user], (err, result) => {
       if (err) return res.sendStatus(400);
-      if (result.user === user) {
+      if (result[0].user === user) {
         res.locals.user = user;
       }
     });
