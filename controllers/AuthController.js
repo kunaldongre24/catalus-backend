@@ -8,9 +8,7 @@ const AuthController = {
     const user = req.body;
     const { email, username, password } = req.body;
     if (!email || !username || !password) {
-      return res
-        .sendStatus(400)
-        .send({ message: "Input field cannot be empty" });
+      return res.send({ message: "Input field cannot be empty" });
     } else {
       const checkUser = `SELECT * FROM user WHERE email=? OR username=?`;
       db.query(checkUser, [email, username], async (err, result) => {
@@ -30,6 +28,7 @@ const AuthController = {
             const sql = `INSERT INTO user SET ?`;
             db.query(sql, user, (err, result) => {
               if (err) throw err;
+              req.session.user = username;
               res.send(result);
             });
           }
@@ -44,14 +43,12 @@ const AuthController = {
     const { username, email, password } = req.body;
     //checking if input field is not empty
     if (!(username || email) || !password) {
-      return res
-        .sendStatus(400)
-        .send({ message: "Input field cannot be empty" });
+      return res.send({ message: "Input field cannot be empty" });
     } else {
       const sql = "SELECT * FROM user WHERE email=? OR username=?";
       db.query(sql, [email, username], (err, result) => {
         if (err) return res.sendStatus(400);
-        //chcking if username exists
+        //checking if username exists
         if (!result[0]) {
           return res.send({ message: "Username or password is incorrect" });
         } else {
@@ -68,13 +65,19 @@ const AuthController = {
                 expiresIn: process.env.JWT_TOKEN_EXPIRES_IN,
               }
             );
-
-            //sending jwt to header
-            return res.header("accessToken", token).send(token);
+            req.session.user = username;
+            res.send({ login: "success" });
           }
         }
       });
     }
+  },
+  logout(req, res) {
+    req.session.destroy((err) => {
+      return res.send("err");
+    });
+    res.clearCookie("user");
+    res.send("logged out successfully!");
   },
 };
 

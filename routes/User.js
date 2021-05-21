@@ -1,9 +1,9 @@
 import UserController from "../controllers/UserController";
-import Auth from "../middleware/Auth";
+import AuthRedirect from "../middleware/AuthRedirect";
 const express = require("express");
 const router = express.Router();
 
-router.get("/", Auth, UserController.getAllUsers);
+router.get("/", AuthRedirect, UserController.getAllUsers);
 
 router.get("/:username", UserController.getUser);
 
