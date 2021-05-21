@@ -44,6 +44,12 @@ app.use((req, res, next) => {
   }
   next();
 });
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    res.clearCookie(SESS_NAME);
+  }
+  next();
+});
 app.use("/api/v1/", indexRouter);
 // catch 404 and forward to error handler
 

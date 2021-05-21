@@ -6,7 +6,6 @@ const UserController = {
     const sql = `SELECT * FROM user`;
     db.query(sql, (err, result) => {
       if (err) throw err;
-      console.log(res.locals);
       res.send(result);
     });
   },
