@@ -11,9 +11,15 @@ var cors = require("cors");
 
 const { PORT, SESSION_LIFETIME, SESSION_SECRET, NODE_ENV } = process.env;
 const SESS_NAME = "user";
-const IN_PROD = NODE_ENV === "production";
+const IN_PROD = NODE_ENV !== "production";
 
-app.use(cors()); // Use this after the variable declaration
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  })
+); // Use this after the variable declaration
 app.use(compression());
 app.use(logger("dev"));
 app.use(express.json());
@@ -27,7 +33,7 @@ app.use(
     cookie: {
       maxAge: SESSION_LIFETIME * 60 * 60 * 1000,
       sameSite: true,
-      secure: false,
+      secure: IN_PROD,
     },
   })
 );

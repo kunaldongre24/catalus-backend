@@ -9,4 +9,8 @@ router.post("/login", AuthController.login);
 
 router.get("/logout", AuthRedirect, AuthController.logout);
 
+router.post("/validateusername", AuthController.usernameValidate);
+
+router.post("/validateemail", AuthController.emailValidate);
+
 module.exports = router;
