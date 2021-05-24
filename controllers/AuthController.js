@@ -27,6 +27,7 @@ const AuthController = {
             const sql = `INSERT INTO user SET ?`;
             db.query(sql, user, (err, result) => {
               if (err) throw err;
+              console.log(result);
               req.session.user = username;
               res.send({ message: "success" });
             });
@@ -57,9 +58,9 @@ const AuthController = {
               throw err;
             }
             if (value) {
-              const { username } = result[0];
+              const { id } = result[0];
 
-              req.session.user = username;
+              req.session.user = id;
               res.send({ message: "signed in successfully" });
             } else {
               return res.send({ err: "Username or password is incorrect" });

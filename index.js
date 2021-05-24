@@ -39,14 +39,18 @@ app.use(
 );
 app.use((req, res, next) => {
   const { user } = req.session;
-  if (user) {
-    const sql = "SELECT * FROM user WHERE username=?";
-    db.query(sql, user, (err, result) => {
-      if (err) return res.sendStatus(400);
-      if (result[0].username === user) {
-        res.locals = result[0];
-      }
-    });
+  try {
+    if (user) {
+      const sql = "SELECT * FROM user WHERE id=?";
+      db.query(sql, user, (err, result) => {
+        if (err) return res.sendStatus(400);
+        if (result[0].username === user) {
+          res.locals = result[0];
+        }
+      });
+    }
+  } catch (err) {
+    throw err;
   }
   next();
 });
