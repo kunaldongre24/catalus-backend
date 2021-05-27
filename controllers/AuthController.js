@@ -28,7 +28,7 @@ const AuthController = {
             db.query(sql, user, (err, result) => {
               if (err) throw err;
               console.log(result);
-              req.session.user = username;
+              req.session.user = result.insertId;
               res.send({ message: "success" });
             });
           }
@@ -43,14 +43,17 @@ const AuthController = {
     const { user, password } = req.body;
     //checking if input field is not empty
     if (!user || !password) {
-      return res.send({ err: "Input field cannot be empty" });
+      return res.send({ login: false, err: "Input field cannot be empty" });
     } else {
       const sql = `SELECT * FROM user WHERE email=? OR username=?`;
       db.query(sql, [user, user], (err, result) => {
         if (err) return res.send({ err: err });
         //checking if username exists
         if (!result[0]) {
-          return res.send({ err: "Username or password is incorrect" });
+          return res.send({
+            login: false,
+            err: "Username or password is incorrect",
+          });
         } else {
           //comparing the password
           bcrypt.compare(password, result[0].password, function (err, value) {
@@ -61,9 +64,12 @@ const AuthController = {
               const { id } = result[0];
 
               req.session.user = id;
-              res.send({ message: "signed in successfully" });
+              res.send({ login: true, user: result[0] });
             } else {
-              return res.send({ err: "Username or password is incorrect" });
+              return res.send({
+                login: false,
+                err: "Username or password is incorrect",
+              });
             }
           });
         }
@@ -159,6 +165,13 @@ const AuthController = {
       res.send({ message: "logged out successfully!" });
     } catch (err) {
       res.send(err);
+    }
+  },
+  checkLogin(req, res) {
+    if (req.session.user) {
+      res.send({ loggedIn: true, user: req.session.user });
+    } else {
+      res.send({ loggedIn: false });
     }
   },
 };

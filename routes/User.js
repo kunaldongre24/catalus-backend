@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.get("/", AuthRedirect, UserController.getAllUsers);
 
-router.get("/:username", UserController.getUser);
+router.get("/:username", UserController.getUserFromUsername);
+
+router.get("/id/:id", UserController.getUserFromUserId);
 
 router.put("/:userId", UserController.updateUser);
 

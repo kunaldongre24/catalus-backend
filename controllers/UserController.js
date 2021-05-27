@@ -10,14 +10,20 @@ const UserController = {
     });
   },
 
-  getUser(req, res) {
+  getUserFromUsername(req, res) {
     const sql = `SELECT * FROM user WHERE username ='${req.params.username}'`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       res.send(result);
     });
   },
-
+  getUserFromUserId(req, res) {
+    const sql = `SELECT * FROM user WHERE id ='${req.params.id}'`;
+    db.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+  },
   async updateUser(req, res) {
     if (req.body.password) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);

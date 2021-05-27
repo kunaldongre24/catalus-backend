@@ -12,6 +12,7 @@ var cors = require("cors");
 const { PORT, SESSION_LIFETIME, SESSION_SECRET, NODE_ENV } = process.env;
 const SESS_NAME = "user";
 const IN_PROD = NODE_ENV !== "production";
+app.disable("etag");
 
 app.use(
   cors({
