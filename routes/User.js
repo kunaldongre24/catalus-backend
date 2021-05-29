@@ -9,6 +9,6 @@ router.get("/:username", UserController.getUserFromUsername);
 
 router.get("/id/:id", UserController.getUserFromUserId);
 
-router.put("/:userId", UserController.updateUser);
+router.put("/:userId", AuthRedirect, UserController.updateUser);
 
 module.exports = router;
