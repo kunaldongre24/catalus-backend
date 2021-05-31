@@ -158,6 +158,30 @@ const AuthController = {
       });
     }
   },
+  nameValidate(req, res) {
+    if (req.body.name) {
+      const { name } = req.body;
+      if (name.length > 50) {
+        return res.send({
+          name,
+          valid: false,
+          message: "School name should be max 50 characters",
+        });
+      } else {
+        return res.send({
+          name,
+          valid: true,
+          message: "This school name is valid",
+        });
+      }
+    } else {
+      return res.send({
+        name: "1",
+        valid: false,
+        message: "School name cannot be left empty",
+      });
+    }
+  },
   logout(req, res) {
     try {
       req.session.destroy();

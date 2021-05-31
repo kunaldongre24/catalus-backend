@@ -13,6 +13,8 @@ router.post("/validateusername", AuthController.usernameValidate);
 
 router.post("/validateemail", AuthController.emailValidate);
 
+router.post("/validatename", AuthController.nameValidate);
+
 router.get("/login", AuthController.checkLogin);
 
 module.exports = router;
