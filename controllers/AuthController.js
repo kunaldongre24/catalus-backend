@@ -168,10 +168,22 @@ const AuthController = {
           message: "School name should be max 50 characters",
         });
       } else {
-        return res.send({
-          name,
-          valid: true,
-          message: "This school name is valid",
+        const checkSchool = `SELECT * FROM school WHERE ownerId=? AND name=?`;
+        db.query(checkSchool, [req.session.user, name], async (err, result) => {
+          if (err) throw err;
+          if (result.length > 0) {
+            return res.send({
+              name,
+              valid: false,
+              message: "You already created a school with this name",
+            });
+          } else {
+            return res.send({
+              name,
+              valid: true,
+              message: "This school name is valid",
+            });
+          }
         });
       }
     } else {
