@@ -7,9 +7,9 @@ router.get("/", AuthRedirect, SchoolController.getAllSchools);
 
 router.post("/", AuthRedirect, SchoolController.createNewSchool);
 
-router.get("/:userId", SchoolController.getSchoolByUserId);
+router.get("/user/:userId", SchoolController.getSchoolByUserId);
 
-router.get("/id/:id", SchoolController.getSchoolBySchoolId);
+router.get("/:schoolId", SchoolController.getSchoolBySchoolId);
 
 router.put("/:schoolId", AuthRedirect, SchoolController.updateSchool);
 

@@ -12,7 +12,7 @@ const SchoolController = {
     const { name, description, privacy } = req.body;
     req.body.ownerId = req.session.user;
     const schoolInfo = req.body;
-    if (!name || !description || !privacy) {
+    if (!name || !privacy) {
       return res.send({ err: "Input field cannot be empty" });
     } else {
       const checkSchool = `SELECT * FROM school WHERE ownerId=? AND name=?`;
@@ -32,14 +32,14 @@ const SchoolController = {
     }
   },
   getSchoolByUserId(req, res) {
-    const sql = `SELECT * FROM school WHERE ownerId ='${req.params.userId}'`;
+    const sql = `SELECT * FROM school WHERE ownerId ='${req.params.userId}' ORDER BY school.last_updated DESC`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       res.send(result);
     });
   },
   getSchoolBySchoolId(req, res) {
-    const sql = `SELECT * FROM school WHERE id ='${req.params.id}'`;
+    const sql = `SELECT * FROM school WHERE id ='${req.params.schoolId}'`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       res.send(result);
@@ -47,7 +47,7 @@ const SchoolController = {
   },
   async updateSchool(req, res) {
     const user = req.body;
-    const sql = `UPDATE school SET ? WHERE id = '${req.params.userId}'`;
+    const sql = `UPDATE school SET ? WHERE id = '${req.params.schoolId}'`;
     db.query(sql, user, (err, result) => {
       if (err) throw err;
       res.send(result);
