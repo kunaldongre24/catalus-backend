@@ -1,5 +1,4 @@
 import db from "../db";
-import { SubjectCourseMapController as SCMap } from "./SubjectCourseMapController";
 
 const CourseController = {
   getAllCourses(req, res) {
@@ -38,8 +37,11 @@ const CourseController = {
                       subjectId: subjectResult[0].id,
                       courseId: courseResult.insertId,
                     };
+                    const updateWeight = `UPDATE subject SET weight = weight+1 WHERE name=?`;
+                    db.query(updateWeight, [subject], (err, mapResult) => {
+                      if (err) throw err;
+                    });
                     const checkMap = `SELECT * FROM courseSubjectMap WHERE subjectId=? AND courseId=?`;
-
                     db.query(
                       checkMap,
                       [subjectResult[0].id, courseResult.insertId],
@@ -52,15 +54,36 @@ const CourseController = {
                             sql,
                             courseSubjectMap,
                             (err, courseResult) => {
-                              console.log("success");
+                              if (err) throw err;
+                              else {
+                                const countCourse = `SELECT COUNT(id) AS count FROM course WHERE schoolId=?`;
+                                db.query(
+                                  countCourse,
+                                  [schoolId],
+                                  (err, countResult) => {
+                                    if (err) throw err;
+                                    else {
+                                      const insertCount = `UPDATE school SET courseCount=? WHERE id=?`;
+                                      db.query(
+                                        insertCount,
+                                        [countResult[0].count, schoolId],
+                                        (err, insertResult) => {
+                                          if (err) throw err;
+                                          console.log("success");
+                                        }
+                                      );
+                                    }
+                                  }
+                                );
+                              }
                             }
                           );
                         }
                       }
                     );
                   } else {
-                    const sql = `INSERT INTO subject SET name=?`;
-                    db.query(sql, subject, (err, subjectResult) => {
+                    const sql = `INSERT INTO subject SET name=? , weight=?`;
+                    db.query(sql, [subject, 1], (err, subjectResult) => {
                       if (err) throw err;
                       if (subjectResult) {
                         courseSubjectMap = {
@@ -81,7 +104,30 @@ const CourseController = {
                                 sql,
                                 courseSubjectMap,
                                 (err, courseResult) => {
-                                  console.log("success");
+                                  if (err) throw err;
+                                  else {
+                                    const countCourse = `SELECT COUNT(id) AS count FROM course WHERE schoolId=?`;
+                                    db.query(
+                                      countCourse,
+                                      [schoolId],
+                                      (err, countResult) => {
+                                        if (err) throw err;
+                                        else {
+                                          const insertCount = `UPDATE school SET courseCount=? WHERE id=?`;
+                                          db.query(
+                                            insertCount,
+                                            [countResult[0].count, schoolId],
+                                            (err, insertResult) => {
+                                              if (err) throw err;
+                                              if (insertResult.insertId > 0) {
+                                                console.log("success");
+                                              }
+                                            }
+                                          );
+                                        }
+                                      }
+                                    );
+                                  }
                                 }
                               );
                             }
@@ -114,6 +160,13 @@ const CourseController = {
   },
   getCourseByCourseId(req, res) {
     const sql = `SELECT * FROM course WHERE id ='${req.params.courseId}'`;
+    db.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+  },
+  courseCount(req, res) {
+    const sql = `SELECT COUNT(id) AS courseCount FROM course WHERE schoolId ='${req.params.schoolId}'`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       res.send(result);

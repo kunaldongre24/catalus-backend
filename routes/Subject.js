@@ -11,6 +11,8 @@ router.get("/name/:name", SubjectController.getSubjectByName);
 
 router.get("/:id", SubjectController.getSubjectById);
 
+router.get("/suggestions/:subject", SubjectController.getSuggestions);
+
 router.put("/:id", AuthRedirect, SubjectController.updateSubject);
 
 module.exports = router;

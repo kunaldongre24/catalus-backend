@@ -11,6 +11,8 @@ router.get("/user/:userId", CourseController.getCoursesByUserId);
 
 router.get("/school/:schoolId", CourseController.getCoursesBySchoolId);
 
+router.get("/courseCount/:schoolId", CourseController.courseCount);
+
 router.get("/:courseId", CourseController.getCourseByCourseId);
 
 router.put("/:courseId", AuthRedirect, CourseController.updateCourse);

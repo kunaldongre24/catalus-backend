@@ -5,13 +5,12 @@ import createError from "http-errors";
 import indexRouter from "./routes/index";
 import compression from "compression";
 import logger from "morgan";
-import session from "express-session";
+import cookieParser from "cookie-parser";
 import db from "./db";
 var cors = require("cors");
 
-const { PORT, SESSION_LIFETIME, SESSION_SECRET, NODE_ENV } = process.env;
-const SESS_NAME = "user";
-const IN_PROD = NODE_ENV !== "production";
+const { PORT } = process.env;
+
 app.disable("etag");
 
 app.use(
@@ -21,32 +20,22 @@ app.use(
     optionSuccessStatus: 200,
   })
 ); // Use this after the variable declaration
+
+app.use(cookieParser());
 app.use(compression());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(
-  session({
-    name: SESS_NAME,
-    resave: false,
-    secret: SESSION_SECRET,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: SESSION_LIFETIME * 60 * 60 * 1000,
-      sameSite: true,
-      secure: IN_PROD,
-    },
-  })
-);
+
 app.use((req, res, next) => {
-  const { user } = req.session;
+  const user = req.cookies.c_id;
   try {
     if (user) {
       const sql = "SELECT * FROM user WHERE id=?";
       db.query(sql, user, (err, result) => {
         if (err) return res.sendStatus(400);
-        if (result[0].username === user) {
-          res.locals = result[0];
+        if (!result.length) {
+          res.clearCookie("c_id");
         }
       });
     }
@@ -55,12 +44,7 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    res.clearCookie(SESS_NAME);
-  }
-  next();
-});
+
 app.use("/api/v1/", indexRouter);
 // catch 404 and forward to error handler
 

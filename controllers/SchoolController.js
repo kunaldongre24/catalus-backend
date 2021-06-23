@@ -10,13 +10,13 @@ const SchoolController = {
   },
   createNewSchool(req, res) {
     const { name, description, privacy } = req.body;
-    req.body.ownerId = req.session.user;
+    req.body.ownerId = req.cookies.c_id;
     const schoolInfo = req.body;
     if (!name || !privacy) {
       return res.send({ err: "Input field cannot be empty" });
     } else {
       const checkSchool = `SELECT * FROM school WHERE ownerId=? AND name=?`;
-      db.query(checkSchool, [req.session.user, name], async (err, result) => {
+      db.query(checkSchool, [req.cookies.c_id, name], async (err, result) => {
         if (result.length > 0) {
           return res.send({
             err: "You already created a school with this name",

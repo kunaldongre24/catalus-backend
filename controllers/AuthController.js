@@ -28,7 +28,9 @@ const AuthController = {
             db.query(sql, user, (err, result) => {
               if (err) throw err;
               console.log(result);
-              req.session.user = result.insertId;
+              res.cookie("c_id", result.insertId, {
+                maxAge: 900000,
+              });
               res.send({ message: "success" });
             });
           }
@@ -63,7 +65,9 @@ const AuthController = {
             if (value) {
               const { id } = result[0];
 
-              req.session.user = id;
+              res.cookie("c_id", id, {
+                maxAge: 900000,
+              });
               res.send({ login: true, user: result[0] });
             } else {
               return res.send({
@@ -169,7 +173,7 @@ const AuthController = {
         });
       } else {
         const checkSchool = `SELECT * FROM school WHERE ownerId=? AND name=?`;
-        db.query(checkSchool, [req.session.user, name], async (err, result) => {
+        db.query(checkSchool, [req.cookies.c_id, name], async (err, result) => {
           if (err) throw err;
           if (result.length > 0) {
             return res.send({
@@ -196,16 +200,15 @@ const AuthController = {
   },
   logout(req, res) {
     try {
-      req.session.destroy();
-      res.clearCookie("user");
+      res.clearCookie("c_id");
       res.send({ message: "logged out successfully!" });
     } catch (err) {
       res.send(err);
     }
   },
   checkLogin(req, res) {
-    if (req.session.user) {
-      res.send({ loggedIn: true, user: req.session.user });
+    if (req.cookies.c_id) {
+      res.send({ loggedIn: true, user: req.cookies.c_id });
     } else {
       res.send({ loggedIn: false });
     }

@@ -32,6 +32,13 @@ const SubjectController = {
     }
   },
   getSubjectByName(req, res) {},
+  getSuggestions(req, res) {
+    const { subject } = req.params;
+    const sql = `SELECT name FROM subject WHERE name LIKE '${subject}%';`;
+    db.query(sql, (err, result) => {
+      res.send(result);
+    });
+  },
   getSubjectById(req, res) {
     const sql = `SELECT * FROM subject WHERE id ='${req.params.id}'`;
     db.query(sql, (err, result) => {
