@@ -34,7 +34,7 @@ const SubjectController = {
   getSubjectByName(req, res) {},
   getSuggestions(req, res) {
     const { subject } = req.params;
-    const sql = `SELECT name FROM subject WHERE name LIKE '${subject}%';`;
+    const sql = `SELECT name FROM subject WHERE name LIKE '${subject}%' ORDER BY weight DESC LIMIT 5;`;
     db.query(sql, (err, result) => {
       res.send(result);
     });

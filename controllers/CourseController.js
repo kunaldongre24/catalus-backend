@@ -26,6 +26,21 @@ const CourseController = {
           db.query(sql, courseInfo, (err, courseResult) => {
             if (err) throw err;
             if (courseResult) {
+              const updateActivity = `INSERT INTO activity SET ?`;
+              db.query(updateActivity, {
+                userId: req.cookies.c_id,
+                activity_description: `Created a new course`,
+                referenceId: courseResult.insertId,
+                referenceType: "course",
+              });
+              const countCourse = `SELECT COUNT(id) AS count FROM course WHERE schoolId=?`;
+              db.query(countCourse, [schoolId], (err, countResult) => {
+                if (err) throw err;
+                else {
+                  const insertCount = `UPDATE school SET courseCount=? WHERE id=?`;
+                  db.query(insertCount, [countResult[0].count, schoolId]);
+                }
+              });
               for (var i = 0; i < subjects.length; i++) {
                 const subject = subjects[i];
                 const checkSubject = `SELECT * FROM subject WHERE name=?`;
@@ -50,34 +65,10 @@ const CourseController = {
                           return;
                         } else {
                           const sql = `INSERT INTO courseSubjectMap SET ?`;
-                          db.query(
-                            sql,
-                            courseSubjectMap,
-                            (err, courseResult) => {
-                              if (err) throw err;
-                              else {
-                                const countCourse = `SELECT COUNT(id) AS count FROM course WHERE schoolId=?`;
-                                db.query(
-                                  countCourse,
-                                  [schoolId],
-                                  (err, countResult) => {
-                                    if (err) throw err;
-                                    else {
-                                      const insertCount = `UPDATE school SET courseCount=? WHERE id=?`;
-                                      db.query(
-                                        insertCount,
-                                        [countResult[0].count, schoolId],
-                                        (err, insertResult) => {
-                                          if (err) throw err;
-                                          console.log("success");
-                                        }
-                                      );
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
+                          db.query(sql, courseSubjectMap, (err, result) => {
+                            if (err) throw err;
+                            console.log("success");
+                          });
                         }
                       }
                     );
@@ -105,29 +96,7 @@ const CourseController = {
                                 courseSubjectMap,
                                 (err, courseResult) => {
                                   if (err) throw err;
-                                  else {
-                                    const countCourse = `SELECT COUNT(id) AS count FROM course WHERE schoolId=?`;
-                                    db.query(
-                                      countCourse,
-                                      [schoolId],
-                                      (err, countResult) => {
-                                        if (err) throw err;
-                                        else {
-                                          const insertCount = `UPDATE school SET courseCount=? WHERE id=?`;
-                                          db.query(
-                                            insertCount,
-                                            [countResult[0].count, schoolId],
-                                            (err, insertResult) => {
-                                              if (err) throw err;
-                                              if (insertResult.insertId > 0) {
-                                                console.log("success");
-                                              }
-                                            }
-                                          );
-                                        }
-                                      }
-                                    );
-                                  }
+                                  console.log("success");
                                 }
                               );
                             }

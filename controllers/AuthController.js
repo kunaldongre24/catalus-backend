@@ -27,9 +27,21 @@ const AuthController = {
             const sql = `INSERT INTO user SET ?`;
             db.query(sql, user, (err, result) => {
               if (err) throw err;
-              console.log(result);
+              const updateActivity = `INSERT INTO activity SET ?`;
+              db.query(
+                updateActivity,
+                {
+                  userId: result.insertId,
+                  activity_description: "Joined Learnsten",
+                  referenceId: result.insertId,
+                  referenceType: "user",
+                },
+                async (err, result) => {
+                  if (err) throw err;
+                }
+              );
               res.cookie("c_id", result.insertId, {
-                maxAge: 900000,
+                maxAge: 9000000,
               });
               res.send({ message: "success" });
             });
@@ -66,7 +78,7 @@ const AuthController = {
               const { id } = result[0];
 
               res.cookie("c_id", id, {
-                maxAge: 900000,
+                maxAge: 9000000,
               });
               res.send({ login: true, user: result[0] });
             } else {

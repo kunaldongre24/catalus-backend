@@ -9,7 +9,7 @@ const SchoolController = {
     });
   },
   createNewSchool(req, res) {
-    const { name, description, privacy } = req.body;
+    const { name, privacy } = req.body;
     req.body.ownerId = req.cookies.c_id;
     const schoolInfo = req.body;
     if (!name || !privacy) {
@@ -25,6 +25,13 @@ const SchoolController = {
           const sql = `INSERT INTO school SET ?`;
           db.query(sql, schoolInfo, (err, result) => {
             if (err) throw err;
+            const updateActivity = `INSERT INTO activity SET ?`;
+            db.query(updateActivity, {
+              userId: req.cookies.c_id,
+              activity_description: `Created a new school`,
+              referenceId: result.insertId,
+              referenceType: "school",
+            });
             res.send({ message: "success" });
           });
         }
