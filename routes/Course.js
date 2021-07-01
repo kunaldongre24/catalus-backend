@@ -9,9 +9,7 @@ router.post("/", AuthRedirect, CourseController.createNewCourse);
 
 router.get("/user/:userId", CourseController.getCoursesByUserId);
 
-router.get("/school/:schoolId", CourseController.getCoursesBySchoolId);
-
-router.get("/courseCount/:schoolId", CourseController.courseCount);
+router.get("/courseCount/:ownerId", CourseController.courseCount);
 
 router.get("/:courseId", CourseController.getCourseByCourseId);
 

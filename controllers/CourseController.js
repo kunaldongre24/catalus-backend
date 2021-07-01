@@ -9,13 +9,30 @@ const CourseController = {
     });
   },
   createNewCourse(req, res) {
-    const { name, description, schoolId, subjects } = req.body;
-    const courseInfo = { name, description, schoolId };
-    if (!name || !schoolId) {
+    const {
+      name,
+      description,
+      subjects,
+      ownerId,
+      subtitle,
+      category,
+      subcategory,
+      language,
+    } = req.body;
+    const courseInfo = {
+      name,
+      subtitle,
+      description,
+      ownerId,
+      category,
+      subcategory,
+      language,
+    };
+    if (!name || !ownerId) {
       return res.send({ err: "Input field cannot be empty" });
     } else {
-      const checkCourse = `SELECT * FROM course WHERE schoolId=? AND name=?`;
-      db.query(checkCourse, [schoolId, name], (err, result) => {
+      const checkCourse = `SELECT * FROM course WHERE ownerId=? AND name=?`;
+      db.query(checkCourse, [ownerId, name], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
           return res.send({
@@ -33,12 +50,12 @@ const CourseController = {
                 referenceId: courseResult.insertId,
                 referenceType: "course",
               });
-              const countCourse = `SELECT COUNT(id) AS count FROM course WHERE schoolId=?`;
-              db.query(countCourse, [schoolId], (err, countResult) => {
+              const countCourse = `SELECT COUNT(id) AS count FROM course WHERE ownerId=?`;
+              db.query(countCourse, [ownerId], (err, countResult) => {
                 if (err) throw err;
                 else {
-                  const insertCount = `UPDATE school SET courseCount=? WHERE id=?`;
-                  db.query(insertCount, [countResult[0].count, schoolId]);
+                  const insertCount = `UPDATE user SET courseCount=? WHERE id=?`;
+                  db.query(insertCount, [countResult[0].count, ownerId]);
                 }
               });
               for (var i = 0; i < subjects.length; i++) {
@@ -120,13 +137,7 @@ const CourseController = {
       res.send(result);
     });
   },
-  getCoursesBySchoolId(req, res) {
-    const sql = `SELECT * FROM course WHERE schoolId ='${req.params.schoolId}' ORDER BY course.last_updated DESC`;
-    db.query(sql, (err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-  },
+
   getCourseByCourseId(req, res) {
     const sql = `SELECT * FROM course WHERE id ='${req.params.courseId}'`;
     db.query(sql, (err, result) => {
@@ -135,7 +146,7 @@ const CourseController = {
     });
   },
   courseCount(req, res) {
-    const sql = `SELECT COUNT(id) AS courseCount FROM course WHERE schoolId ='${req.params.schoolId}'`;
+    const sql = `SELECT COUNT(id) AS courseCount FROM course WHERE userId ='${req.params.userId}'`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       res.send(result);

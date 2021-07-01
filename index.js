@@ -24,8 +24,8 @@ app.use(
 app.use(cookieParser());
 app.use(compression());
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use((req, res, next) => {
   const user = req.cookies.c_id;
@@ -33,9 +33,9 @@ app.use((req, res, next) => {
     if (user) {
       const sql = "SELECT * FROM user WHERE id=?";
       db.query(sql, user, (err, result) => {
-        if (err) return res.sendStatus(400);
+        if (err) return res.send(err);
         if (!result.length) {
-          res.clearCookie("c_id");
+          return res.clearCookie("c_id");
         }
       });
     }
