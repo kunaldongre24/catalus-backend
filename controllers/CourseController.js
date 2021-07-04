@@ -17,6 +17,7 @@ const CourseController = {
       subtitle,
       category,
       subcategory,
+      course_image_url,
       language,
     } = req.body;
     const courseInfo = {
@@ -27,6 +28,7 @@ const CourseController = {
       category,
       subcategory,
       language,
+      course_image_url,
     };
     if (!name || !ownerId) {
       return res.send({ err: "Input field cannot be empty" });
@@ -84,7 +86,7 @@ const CourseController = {
                           const sql = `INSERT INTO courseSubjectMap SET ?`;
                           db.query(sql, courseSubjectMap, (err, result) => {
                             if (err) throw err;
-                            console.log("success");
+                            res.send({ courseId: courseResult.insertId });
                           });
                         }
                       }
@@ -113,7 +115,7 @@ const CourseController = {
                                 courseSubjectMap,
                                 (err, courseResult) => {
                                   if (err) throw err;
-                                  console.log("success");
+                                  res.send({ courseId: courseResult.insertId });
                                 }
                               );
                             }

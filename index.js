@@ -21,6 +21,7 @@ app.use(
   })
 ); // Use this after the variable declaration
 
+app.use("/static", express.static("static"));
 app.use(cookieParser());
 app.use(compression());
 app.use(logger("dev"));
