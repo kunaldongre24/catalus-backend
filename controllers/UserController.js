@@ -3,25 +3,26 @@ const bcrypt = require("bcrypt");
 
 const UserController = {
   getAllUsers(req, res) {
-    const sql = `SELECT * FROM user`;
+    const sql = `SELECT id,name,email,batch_name,standard,board FROM user`;
     db.query(sql, (err, result) => {
       if (err) throw err;
-      res.send(result);
+      return res.send(result);
     });
   },
 
-  getUserFromUsername(req, res) {
-    const sql = `SELECT * FROM user WHERE username ='${req.params.username}'`;
+  getUserFromUserId(req, res) {
+    const sql = `SELECT id,name,email,batch_name,standard,board FROM user WHERE id ='${req.params.id}'`;
     db.query(sql, (err, result) => {
       if (err) throw err;
-      res.send(result);
+      return res.send(result);
     });
   },
-  getUserFromUserId(req, res) {
-    const sql = `SELECT * FROM user WHERE id ='${req.params.id}'`;
+  searchUser(req, res) {
+    const { q } = req.params;
+    const sql = `SELECT id,name,batch_name FROM user WHERE (name LIKE '%${q}%' OR id LIKE '${q}%');`;
     db.query(sql, (err, result) => {
       if (err) throw err;
-      res.send(result);
+      return res.send(result);
     });
   },
   async updateUser(req, res) {
@@ -33,7 +34,7 @@ const UserController = {
     const sql = `UPDATE user SET ? WHERE id = '${req.params.userId}'`;
     db.query(sql, user, (err, result) => {
       if (err) throw err;
-      res.send(result);
+      return res.send(result);
     });
   },
 };

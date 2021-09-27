@@ -1,14 +1,14 @@
 import UserController from "../controllers/UserController";
-import AuthRedirect from "../middleware/AuthRedirect";
+const auth = require("../middleware/Auth");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", AuthRedirect, UserController.getAllUsers);
-
-router.get("/:username", UserController.getUserFromUsername);
+router.get("/", auth, UserController.getAllUsers);
 
 router.get("/id/:id", UserController.getUserFromUserId);
 
-router.put("/:userId", AuthRedirect, UserController.updateUser);
+router.get("/search/:q", UserController.searchUser);
+
+router.put("/:userId", auth, UserController.updateUser);
 
 module.exports = router;

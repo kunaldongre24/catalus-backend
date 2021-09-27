@@ -1,5 +1,5 @@
 import FileController from "../controllers/FileController";
-import AuthRedirect from "../middleware/AuthRedirect";
+const auth = require("../middleware/Auth");
 import { v4 as uuidv4 } from "uuid";
 const express = require("express");
 const router = express.Router();
@@ -35,6 +35,11 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-router.post("/singleFile", upload.single("image"), FileController.uploadFile);
+router.post(
+  "/singleFile",
+  auth,
+  upload.single("image"),
+  FileController.uploadFile
+);
 
 module.exports = router;
