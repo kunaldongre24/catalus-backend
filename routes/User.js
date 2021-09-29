@@ -7,7 +7,9 @@ router.get("/", auth, UserController.getAllUsers);
 
 router.get("/id/:id", UserController.getUserFromUserId);
 
-router.get("/search/:q", UserController.searchUser);
+router.get("/search", UserController.searchUser);
+
+router.get("/batchmate", UserController.getBatchMates);
 
 router.put("/:userId", auth, UserController.updateUser);
 

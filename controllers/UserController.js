@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const UserController = {
   getAllUsers(req, res) {
-    const sql = `SELECT id,name,email,batch_name,standard,board FROM user`;
+    const sql = `SELECT id,name,email,batch_name,standard,board,profile_img_url FROM user`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       return res.send(result);
@@ -11,15 +11,31 @@ const UserController = {
   },
 
   getUserFromUserId(req, res) {
-    const sql = `SELECT id,name,email,batch_name,standard,board FROM user WHERE id ='${req.params.id}'`;
+    const sql = `SELECT id,name,email,batch_name,standard,board,profile_img_url FROM user WHERE id ='${req.params.id}'`;
+    db.query(sql, (err, result) => {
+      if (err) throw err;
+      return res.send(result);
+    });
+  },
+  getBatchMates(req, res) {
+    const { batch_name, standard, id } = req.query;
+    const sql = `SELECT id,name,batch_name,profile_img_url FROM user WHERE (batch_name=${batch_name} OR standard=${standard})AND id!=${id} order by case 
+    when batch_name=${batch_name} then 1 
+    when standard=${standard} then 2 
+    else 3 
+end;`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       return res.send(result);
     });
   },
   searchUser(req, res) {
-    const { q } = req.params;
-    const sql = `SELECT id,name,batch_name FROM user WHERE (name LIKE '%${q}%' OR id LIKE '${q}%');`;
+    const q = req.query.s;
+    const sql = `SELECT id,name,batch_name,profile_img_url FROM user WHERE (name LIKE '%${q}%' OR id LIKE '${q}%') order by case 
+    when name LIKE '${q}%' then 1 
+    when name LIKE '%${q}'  then 2 
+    else 3 
+end;`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       return res.send(result);
