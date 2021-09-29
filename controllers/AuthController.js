@@ -31,7 +31,7 @@ const AuthController = {
               // Create token
               const token = jwt.sign(
                 { user_id: result._id, email },
-                process.env.ACCESS_TOKEN_SECRET
+                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj"
               );
 
               // save user token
@@ -79,7 +79,7 @@ const AuthController = {
               // Create token
               const token = jwt.sign(
                 { user_id: id, email },
-                process.env.ACCESS_TOKEN_SECRET
+                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj"
               );
 
               // save user token

@@ -3,10 +3,10 @@ const mysql = require("mysql");
 const { DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME } =
   process.env;
 const db = mysql.createConnection({
-  host: DATABASE_HOST,
-  user: DATABASE_USER,
-  password: DATABASE_PASSWORD,
-  database: DATABASE_NAME,
+  host: sql6.freemysqlhosting.net,
+  user: sql6440988,
+  password: iS1K7zk5ju,
+  database: sql6440988,
 });
 const connection = db.connect((err) => {
   if (err) {
