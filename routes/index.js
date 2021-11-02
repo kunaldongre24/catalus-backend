@@ -11,5 +11,6 @@ router.use("/upload", fileRoute);
 router.use("/user", userRoute);
 router.use("/staff", staffRoute);
 router.use("/batch", batchRoute);
+router.use("/subject", batchRoute);
 
 module.exports = router;

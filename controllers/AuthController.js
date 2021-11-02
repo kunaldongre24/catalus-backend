@@ -5,22 +5,22 @@ const jwt = require("jsonwebtoken");
 const AuthController = {
   signup(req, res) {
     const user = req.body;
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
     const userData = { email };
-    if (!email || !name || !password) {
+    if (!email || !username || !password) {
       return res.send({
         status: 0,
         err: "Input field cannot be empty",
       });
     } else {
-      const checkUser = `SELECT * FROM user WHERE email=?`;
-      db.query(checkUser, [email], async (err, result) => {
+      const checkUser = `SELECT * FROM user WHERE email=? or username=?`;
+      db.query(checkUser, [email, username], async (err, result) => {
         try {
           if (err) return res.sendStatus(400);
           if (result[0] && result[0].email === email) {
             return res.send({
               status: 0,
-              err: "An account already exists with this email",
+              err: "An account already exists with this email or username",
             });
           } else {
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -58,14 +58,14 @@ const AuthController = {
         err: "Input field cannot be empty",
       });
     } else {
-      const sql = `SELECT * FROM user WHERE email=?`;
-      db.query(sql, email, (err, result) => {
+      const sql = `SELECT * FROM user WHERE email=? or username=?`;
+      db.query(sql, [email, email], (err, result) => {
         if (err) throw err;
         //checking if username exists
         if (!result[0]) {
           return res.send({
             status: 0,
-            err: "Email or password is incorrect",
+            err: "The credentials don't match!",
           });
         } else {
           //comparing the password
@@ -74,16 +74,24 @@ const AuthController = {
               throw err;
             }
             if (value) {
-              const { id, email, name, batch_name, standard, board } =
+              const { id, email, username, name, batch_name, standard, board } =
                 result[0];
               // Create token
               const token = jwt.sign(
                 { user_id: id, email },
-                process.env.ACCESS_TOKEN_SECRET
+                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj"
               );
 
               // save user token
-              const userData = { id, email, name, batch_name, standard, board };
+              const userData = {
+                id,
+                email,
+                username,
+                name,
+                batch_name,
+                standard,
+                board,
+              };
               // user
               res.send(userData);
             } else {
