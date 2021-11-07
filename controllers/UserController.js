@@ -1,4 +1,4 @@
-import db from "../db";
+const db = require("../db");
 const bcrypt = require("bcrypt");
 
 const UserController = {
@@ -55,4 +55,4 @@ end;`;
   },
 };
 
-export default UserController;
+module.exports = UserController;

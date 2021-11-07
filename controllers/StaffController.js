@@ -1,4 +1,4 @@
-import db from "../db";
+const db = require("../db");
 
 const StaffController = {
   getAllStaff(req, res) {
@@ -18,4 +18,4 @@ const StaffController = {
   },
 };
 
-export default StaffController;
+module.exports = StaffController;

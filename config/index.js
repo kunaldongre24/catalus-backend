@@ -1,5 +1,5 @@
 require("dotenv").config();
-export default {
+module.exports = {
   database: {
     host: "",
     user: "",

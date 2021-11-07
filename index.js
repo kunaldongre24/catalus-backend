@@ -1,12 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-import createError from "http-errors";
-import indexRouter from "./routes/index";
-import compression from "compression";
-import logger from "morgan";
-import cookieParser from "cookie-parser";
-import db from "./db";
+const createError = require("http-errors");
+const indexRouter = require("./routes/index");
+const compression = require("compression");
+const logger = require("morgan");
+const db = require("./db");
 var cors = require("cors");
 
 const { PORT } = process.env;
@@ -22,36 +21,13 @@ app.use(
 ); // Use this after the variable declaration
 
 app.use("/static", express.static("static"));
-app.use(cookieParser());
 app.use(compression());
 app.use(logger("dev"));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
-app.use((req, res, next) => {
-  const user = req.cookies.c_id;
-  try {
-    if (user) {
-      const sql = "SELECT * FROM user WHERE id=?";
-      db.query(sql, user, (err, result) => {
-        if (err) return res.send(err);
-        if (!result.length) {
-          return res.clearCookie("c_id");
-        }
-      });
-    }
-  } catch (err) {
-    throw err;
-  }
-  next();
-});
-
 app.use("/api/v1/", indexRouter);
 // catch 404 and forward to error handler
-
-app.use(function (req, res, next) {
-  next(createError(404));
-});
 
 const port = PORT || 8000;
 app.listen(port, () => {

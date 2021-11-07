@@ -1,4 +1,4 @@
-import db from "../db";
+const db = require("../db");
 
 const BatchController = {
   getAllBatch(req, res) {
@@ -18,4 +18,4 @@ const BatchController = {
   },
 };
 
-export default BatchController;
+module.exports = BatchController;

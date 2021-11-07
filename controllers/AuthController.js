@@ -1,4 +1,4 @@
-import db from "../db";
+const db = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -108,7 +108,6 @@ const AuthController = {
 
   logout(req, res) {
     try {
-      res.clearCookie("c_id");
       res.send({ message: "logged out successfully!" });
     } catch (err) {
       res.send(err);
@@ -116,4 +115,4 @@ const AuthController = {
   },
 };
 
-export default AuthController;
+module.exports = AuthController;

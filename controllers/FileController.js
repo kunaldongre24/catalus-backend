@@ -1,4 +1,4 @@
-import db from "../db";
+const db = require("../db");
 const fs = require("fs");
 
 const FileController = {
@@ -8,4 +8,4 @@ const FileController = {
     }
   },
 };
-export default FileController;
+module.exports = FileController;

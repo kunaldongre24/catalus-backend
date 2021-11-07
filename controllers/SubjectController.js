@@ -1,4 +1,4 @@
-import db from "../db";
+const db = require( "../db";
 
 const SubjectController = {
   getsubjectsByUserId(req, res) {
@@ -17,4 +17,4 @@ const SubjectController = {
   },
 };
 
-export default SubjectController;
+module.exports = SubjectController;

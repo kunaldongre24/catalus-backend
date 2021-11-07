@@ -1,4 +1,4 @@
-import AuthController from "../controllers/AuthController";
+const AuthController = require("../controllers/AuthController");
 const auth = require("../middleware/Auth");
 const express = require("express");
 const router = express.Router();

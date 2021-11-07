@@ -1,4 +1,4 @@
-import SubjectController from "../controllers/SubjectController";
+const SubjectController = require("../controllers/SubjectController");
 const express = require("express");
 const router = express.Router();
 

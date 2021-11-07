@@ -1,8 +1,8 @@
-import authRoute from "./Auth";
-import userRoute from "./User";
-import staffRoute from "./Staff";
-import fileRoute from "./File";
-import batchRoute from "./Batch";
+const authRoute = require("./Auth");
+const userRoute = require("./User");
+const staffRoute = require("./Staff");
+const fileRoute = require("./File");
+const batchRoute = require("./Batch");
 const express = require("express");
 const router = express.Router();
 

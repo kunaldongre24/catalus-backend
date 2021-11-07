@@ -1,4 +1,4 @@
-import BatchController from "../controllers/BatchController";
+const BatchController = require("../controllers/BatchController");
 const auth = require("../middleware/Auth");
 const express = require("express");
 const router = express.Router();

@@ -1,6 +1,6 @@
-import FileController from "../controllers/FileController";
+const FileController = require("../controllers/FileController");
 const auth = require("../middleware/Auth");
-import { v4 as uuidv4 } from "uuid";
+const { v4: uuidv4 } = require("uuid");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");

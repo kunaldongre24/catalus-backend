@@ -1,4 +1,4 @@
-import StaffController from "../controllers/StaffController";
+const StaffController = require("../controllers/StaffController");
 const express = require("express");
 const router = express.Router();
 
