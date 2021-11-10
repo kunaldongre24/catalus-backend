@@ -91,6 +91,7 @@ const AuthController = {
                 batch_name,
                 standard,
                 board,
+                token,
               };
               // user
               res.send(userData);
