@@ -3,17 +3,16 @@ const jwt = require("jsonwebtoken");
 const config = process.env;
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers["authorization"];
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
 
   if (!token) {
     return res.status(403).send("A token is required for authentication");
   }
   try {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
     const decoded = jwt.verify(
-      bearerToken,
-      "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj"
+      token,
+      "this is secret, change it when in production"
     );
     req.user = decoded;
   } catch (err) {
