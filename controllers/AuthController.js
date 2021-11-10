@@ -31,7 +31,7 @@ const AuthController = {
               // Create token
               const token = jwt.sign(
                 { user_id: result._id, email },
-                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj"
+                "this is secret, change it when in production"
               );
 
               // save user token
@@ -78,8 +78,8 @@ const AuthController = {
                 result[0];
               // Create token
               const token = jwt.sign(
-                { user_id: id, email },
-                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj",
+                { id, email },
+                "this is secret, change it when in production",
                 {
                   expiresIn: 300,
                 }
