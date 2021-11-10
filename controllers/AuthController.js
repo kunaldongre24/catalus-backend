@@ -79,7 +79,10 @@ const AuthController = {
               // Create token
               const token = jwt.sign(
                 { user_id: id, email },
-                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj"
+                "LKJLFkjdl;kfjdskfjlkjsdklfjdskj%@#$@#$@#4kjkjklejflkjl;jk23klkjlkfjkdlfjlkj",
+                {
+                  expiresIn: 300,
+                }
               );
 
               // save user token
