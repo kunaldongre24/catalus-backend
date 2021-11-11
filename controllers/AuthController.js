@@ -74,8 +74,7 @@ const AuthController = {
               throw err;
             }
             if (value) {
-              const { id, email, username, name, batch_name, standard, board } =
-                result[0];
+              const { id, email, username, name } = result[0];
               // Create token
               const token = jwt.sign(
                 { id, email },
@@ -88,9 +87,6 @@ const AuthController = {
                 email,
                 username,
                 name,
-                batch_name,
-                standard,
-                board,
                 token,
               };
               // user

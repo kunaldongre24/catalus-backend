@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const UserController = {
   getAllUsers(req, res) {
-    const sql = `SELECT id,name,email,batch_name,standard,board,profile_img_url FROM user`;
+    const sql = `SELECT id,name,username,email,profile_img_url FROM user`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       return res.send(result);
@@ -11,7 +11,7 @@ const UserController = {
   },
 
   getUserFromUserId(req, res) {
-    const sql = `SELECT id,name,email,batch_name,standard,board,profile_img_url FROM user WHERE id ='${req.params.id}'`;
+    const sql = `SELECT id,name,username,email,profile_img_url FROM user WHERE id ='${req.params.id}'`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       return res.send(result);
@@ -20,7 +20,7 @@ const UserController = {
 
   searchUser(req, res) {
     const q = req.query.s;
-    const sql = `SELECT id,name,username,batch_name,profile_img_url FROM user WHERE (name LIKE '%${q}%' OR id LIKE '${q}%' OR email LIKE '${q}%' OR username LIKE '${q}%' ) order by case 
+    const sql = `SELECT id,name,username,profile_img_url FROM user WHERE (name LIKE '%${q}%' OR id LIKE '${q}%' OR email LIKE '${q}%' OR username LIKE '${q}%' ) order by case 
     when name LIKE '${q}%' then 1 
     when name LIKE '%${q}' then 2
     else 3
