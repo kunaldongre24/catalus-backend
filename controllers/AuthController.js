@@ -79,10 +79,7 @@ const AuthController = {
               // Create token
               const token = jwt.sign(
                 { id, email },
-                "this is secret, change it when in production",
-                {
-                  expiresIn: 300,
-                }
+                "this is secret, change it when in production"
               );
 
               // save user token
