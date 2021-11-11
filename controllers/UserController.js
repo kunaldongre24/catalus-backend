@@ -17,18 +17,7 @@ const UserController = {
       return res.send(result);
     });
   },
-  getBatchMates(req, res) {
-    const { batch_name, standard, id } = req.query;
-    const sql = `SELECT id,name,batch_name,profile_img_url FROM user WHERE (batch_name=${batch_name} OR standard=${standard})AND id!=${id} order by case 
-    when batch_name=${batch_name} then 1 
-    when standard=${standard} then 2 
-    else 3 
-end;`;
-    db.query(sql, (err, result) => {
-      if (err) throw err;
-      return res.send(result);
-    });
-  },
+
   searchUser(req, res) {
     const q = req.query.s;
     const sql = `SELECT id,name,username,batch_name,profile_img_url FROM user WHERE (name LIKE '%${q}%' OR id LIKE '${q}%' OR email LIKE '${q}%' OR username LIKE '${q}%' ) order by case 

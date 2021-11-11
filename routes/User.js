@@ -9,8 +9,6 @@ router.get("/id/:id", UserController.getUserFromUserId);
 
 router.get("/search", auth, UserController.searchUser);
 
-router.get("/batchmate", UserController.getBatchMates);
-
 router.put("/:userId", auth, UserController.updateUser);
 
 module.exports = router;
