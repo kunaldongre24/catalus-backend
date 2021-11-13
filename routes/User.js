@@ -9,6 +9,6 @@ router.get("/id/:id", UserController.getUserFromUserId);
 
 router.get("/search", auth, UserController.searchUser);
 
-router.put("/:userId", auth, UserController.updateUser);
+router.put("/update/:userId", auth, UserController.updateUser);
 
 module.exports = router;
